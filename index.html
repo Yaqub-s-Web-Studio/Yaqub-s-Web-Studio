@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="description" content="Fast, mobile-friendly websites and web apps for small businesses in Saint Paul and the Twin Cities. Custom sites, online payments, and booking. Get a free quote.">  <title>Yaqub's Web Studio </title>
+  <style>
+    :root { --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --muted:#94a3b8; --accent:#3b82f6; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+    .wrap { max-width:900px; margin:0 auto; padding:0 20px; }
+    header { padding:80px 0 50px; }
+    h1 { font-size:2.4rem; margin-bottom:10px; }
+    header p { color:var(--muted); max-width:600px; font-size:1.1rem; }
+    .btn { display:inline-block; margin-top:24px; padding:12px 24px; background:var(--accent);
+           color:#fff; text-decoration:none; border-radius:8px; font-weight:600; }
+    h2 { margin:50px 0 20px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+    .card { background:var(--card); border-radius:12px; padding:20px; }
+    .card img { width:100%; border-radius:8px; margin-bottom:12px; }
+    .card h3 { margin-bottom:6px; }
+    .card p { color:var(--muted); font-size:.95rem; }
+    .card a { color:var(--accent); text-decoration:none; font-weight:600; display:inline-block; margin-top:10px; }
+    form { display:grid; gap:12px; max-width:500px; }
+    input, textarea { padding:12px; border-radius:8px; border:1px solid #334155;
+                      background:var(--card); color:var(--text); font:inherit; }
+    button { padding:12px; border:0; border-radius:8px; background:var(--accent);
+             color:#fff; font-weight:600; font-size:1rem; cursor:pointer; }
+    footer { margin:60px 0 30px; color:var(--muted); text-align:center; font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Websites that bring in customers.</h1>
+      <p>I build fast, clean websites and web apps for small businesses in the Twin Cities.
+         Self-taught developer, started through a Project Invent internship.</p>
+      <a class="btn" href="#contact">Get a free quote</a>
+    </header>
+
+    <h2>Projects</h2>
+    <div class="grid">
+      <div class="card">
+        <!-- <img src="loadboard.png" alt="Load board screenshot"> -->
+        <h3>Truck Load Board</h3>
+        <p>Full-stack app with live driver tracking, claimable loads, and an admin dashboard.</p>
+        <!-- <a href="LIVE_LINK">View live</a> -->
+      </div>
+      <div class="card">
+        <!-- <img src="reviewer.png" alt="AI Presentation Reviewer screenshot"> -->
+        <h3>AI Presentation Reviewer</h3>
+        <p>Web app that grades presentations against a rubric using AI. Built at a CodeDay hackathon.</p>
+        <a href="https://github.com/codeday-labs/project-invent-ai-reviewer">View code</a>
+      </div>
+      <div class="card">
+        <h3>Barbershop Sample Site</h3>
+        <p>Mobile-first demo site with services, booking button, hours, and map.</p>
+      </div>
+    </div>
+
+    <h2>What I can build</h2>
+    <div class="grid">
+      <div class="card"><h3>Business sites</h3><p>One-page or multi-page, mobile-ready, with contact forms and maps.</p></div>
+      <div class="card"><h3>Online payments</h3><p>Stripe or Square checkout so you can get paid straight from your site.</p></div>
+      <div class="card"><h3>Custom apps</h3><p>Logins, dashboards, and tools built around how your business works.</p></div>
+    </div>
+
+    <h2 id="contact">Contact</h2>
+    <!-- Make a free form at formspree.io and paste your form ID below -->
+    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="text" name="name" placeholder="Your name" required>
+      <input type="email" name="email" placeholder="Your email" required>
+      <textarea name="message" rows="4" placeholder="Tell me about your business" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+
+    <footer>&copy; 2026 Yaqub &middot; Saint Paul, MN</footer>
+  </div>
+</body>
+</html>
