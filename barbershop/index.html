@@ -15,8 +15,10 @@
     nav { display:flex; justify-content:space-between; align-items:center; padding:18px 0; }
     nav .logo { font-size:1.3rem; letter-spacing:2px; text-transform:uppercase; }
     nav .logo span { color:var(--gold); }
-    .btn { display:inline-block; padding:12px 26px; background:var(--gold); color:#111; text-decoration:none;
+    .btn { display:inline-block; padding:12px 26px; background:var(--gold); color:#111; text-decoration:none; border:0; cursor:pointer;
            font:700 .95rem system-ui,sans-serif; border-radius:4px; text-transform:uppercase; letter-spacing:1px; }
+    .btn:disabled { opacity:.4; cursor:not-allowed; }
+    .btn.ghost { background:transparent; color:var(--gold); border:1px solid var(--gold); }
     .hero { padding:70px 0 80px; text-align:center;
             background:linear-gradient(rgba(17,17,17,.7),rgba(17,17,17,.95)),
                        repeating-linear-gradient(45deg,#1b1b1b 0 12px,#161616 12px 24px); }
@@ -38,8 +40,27 @@
     .hours div { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #2a2a2a; }
     .hours span:last-child { color:var(--muted); }
     iframe { width:100%; height:260px; border:0; border-radius:8px; filter:grayscale(.6) invert(.9) contrast(.9); }
-    .book { text-align:center; background:var(--card); padding:44px 20px; border-radius:8px; margin-top:64px; }
-    .book p { color:var(--muted); margin:8px 0 22px; font-family:system-ui,sans-serif; }
+
+    /* booking */
+    .booking { background:var(--card); padding:28px 22px; border-radius:8px; margin-top:64px; font-family:system-ui,sans-serif; }
+    .booking h2 { margin-top:0; }
+    .lead { text-align:center; color:var(--muted); margin:-10px 0 24px; }
+    .fields { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); margin-bottom:18px; }
+    label { display:block; font:600 .75rem system-ui,sans-serif; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:1px; }
+    select, input, textarea { width:100%; padding:12px; background:#111; border:1px solid #333; color:var(--text); border-radius:4px; font:1rem system-ui,sans-serif; }
+    input[type=date] { color-scheme:dark; }
+    .slots { display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:8px; margin:6px 0 20px; }
+    .slot { padding:10px 4px; border:1px solid #333; background:#111; color:var(--text); border-radius:4px; font:600 .85rem system-ui,sans-serif; cursor:pointer; }
+    .slot:hover:not(:disabled) { border-color:var(--gold); }
+    .slot.sel { background:var(--gold); color:#111; border-color:var(--gold); }
+    .slot:disabled { opacity:.35; text-decoration:line-through; cursor:not-allowed; }
+    .hint { color:var(--muted); grid-column:1/-1; }
+    .msg { color:#e07a6b; margin-top:12px; min-height:1.2em; }
+    .note { color:var(--muted); font-size:.8rem; margin-top:14px; }
+    .done { text-align:center; padding:10px 0; }
+    .done h3 { color:var(--gold); font-size:1.5rem; margin-bottom:8px; }
+    .done p { color:var(--muted); margin-bottom:18px; }
+    .done .btn { margin:4px; }
     footer { text-align:center; color:var(--muted); font:.85rem system-ui,sans-serif; padding:50px 0 30px; }
     footer a { color:var(--gold); }
   </style>
@@ -57,7 +78,7 @@
   <section class="hero">
     <div class="wrap">
       <h1>Sharp cuts.<br>Clean lines.</h1>
-      <p>Fades, tapers, beard trims, and hot-towel shaves in the heart of Saint Paul.</p>
+      <p>Fades, tapers, beard trims, and hot-towel shaves in the heart of Saint Paul. Walk-ins welcome, or reserve a time.</p>
       <a class="btn" href="#book">Book your chair</a>
     </div>
   </section>
@@ -84,7 +105,7 @@
     <div class="info">
       <div>
         <p><b>Cutline Barbershop</b><br>123 Example Ave<br>Saint Paul, MN 55101</p>
-        <p style="margin-top:10px">(651) 555-0123</p>
+        <p style="margin-top:10px"><a href="tel:+16515550123" style="color:var(--gold)">(651) 555-0123</a></p>
         <div class="hours" style="margin-top:18px">
           <div><span>Mon – Fri</span><span>9am – 7pm</span></div>
           <div><span>Saturday</span><span>8am – 5pm</span></div>
@@ -95,11 +116,49 @@
         src="https://www.google.com/maps?q=Saint+Paul,+MN&output=embed"></iframe>
     </div>
 
-    <section class="book" id="book">
-      <h2 style="margin:0">Book Your Chair</h2>
-      <p>Pick a time that works. Walk-ins welcome when we have an opening.</p>
-      <!-- Swap this href for a real Square Appointments, Booksy, or Calendly link -->
-      <a class="btn" href="#book">Book online</a>
+    <section class="booking" id="book">
+      <h2>Reserve a Time</h2>
+      <p class="lead">Walk-ins welcome. Or grab a spot and skip the wait.</p>
+
+      <form id="form" action="https://formspree.io/f/moeevjen" method="POST">
+        <div class="fields">
+          <div><label for="service">Service</label>
+            <select id="service" name="service">
+              <option value="Classic Haircut">Classic Haircut ($30)</option>
+              <option value="Skin Fade">Skin Fade ($35)</option>
+              <option value="Beard Trim &amp; Shape">Beard Trim &amp; Shape ($20)</option>
+              <option value="Hot-Towel Shave">Hot-Towel Shave ($30)</option>
+              <option value="Cut + Beard Combo">Cut + Beard Combo ($50)</option>
+              <option value="Kids Cut">Kids Cut ($22)</option>
+            </select></div>
+          <div><label for="barber">Barber</label>
+            <select id="barber" name="barber">
+              <option>Any barber</option><option>Marcus</option><option>Dre</option><option>Leo</option>
+            </select></div>
+          <div><label for="date">Date</label>
+            <input type="date" id="date" name="date" required></div>
+        </div>
+
+        <label>Open times</label>
+        <div class="slots" id="slots"><p class="hint">Pick a date to see open times.</p></div>
+
+        <div class="fields">
+          <div><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required></div>
+          <div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" required></div>
+          <div><label for="email">Email (optional)</label><input id="email" name="email" type="email" autocomplete="email"></div>
+        </div>
+
+        <button class="btn" id="submit" type="submit" disabled>Request this time</button>
+        <p class="msg" id="msg" role="alert"></p>
+        <p class="note">Demo: requests go to the developer, not a real shop. Barber availability here is simulated.</p>
+      </form>
+
+      <div class="done" id="done" hidden>
+        <h3>You’re on the list!</h3>
+        <p id="summary"></p>
+        <button class="btn" id="cal" type="button">Add to calendar</button>
+        <button class="btn ghost" id="again" type="button">Book another</button>
+      </div>
     </section>
 
     <footer>
@@ -107,5 +166,139 @@
       Website by <a href="../">Yaqub’s Web Studio</a>
     </footer>
   </div>
+
+  <script>
+    // Hours by weekday (0 = Sunday): [open hour, close hour] or null if closed
+    const HOURS = { 0:null, 1:[9,19], 2:[9,19], 3:[9,19], 4:[9,19], 5:[9,19], 6:[8,17] };
+    const DURATION = { "Classic Haircut":30, "Skin Fade":45, "Beard Trim & Shape":30,
+                       "Hot-Towel Shave":30, "Cut + Beard Combo":60, "Kids Cut":30 };
+    const booked = new Set();   // slots booked this visit
+    let chosen = null;          // { hh, mm, label }
+
+    const $ = id => document.getElementById(id);
+    const form = $("form"), dateEl = $("date"), slotsEl = $("slots"), barberEl = $("barber"),
+          serviceEl = $("service"), nameEl = $("name"), phoneEl = $("phone"),
+          btn = $("submit"), msg = $("msg"), done = $("done");
+
+    const pad = n => String(n).padStart(2, "0");
+    const ymd = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+    const fmt = (hh, mm) => (((hh + 11) % 12) + 1) + ":" + pad(mm) + " " + (hh < 12 ? "AM" : "PM");
+
+    const today = new Date();
+    const last = new Date(); last.setDate(last.getDate() + 30);
+    dateEl.min = ymd(today);
+    dateEl.max = ymd(last);
+
+    // Simulated "already taken" slots so the calendar feels real (stable per date/time/barber)
+    function fakeTaken(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+      return h % 4 === 0;
+    }
+
+    function slotKey(hh, mm) { return dateEl.value + "|" + pad(hh) + ":" + pad(mm) + "|" + barberEl.value; }
+
+    function updateBtn() {
+      const phoneOk = phoneEl.value.replace(/\D/g, "").length >= 10;
+      btn.disabled = !(chosen && nameEl.value.trim() && phoneOk);
+    }
+
+    function renderSlots() {
+      slotsEl.innerHTML = "";
+      chosen = null;
+      updateBtn();
+      if (!dateEl.value) {
+        slotsEl.innerHTML = '<p class="hint">Pick a date to see open times.</p>';
+        return;
+      }
+      const [y, m, d] = dateEl.value.split("-").map(Number);
+      const hrs = HOURS[new Date(y, m - 1, d).getDay()];
+      if (!hrs) {
+        slotsEl.innerHTML = '<p class="hint">We’re closed Sundays. Pick another day.</p>';
+        return;
+      }
+      for (let t = hrs[0] * 60; t < hrs[1] * 60; t += 30) {
+        const hh = Math.floor(t / 60), mm = t % 60;
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "slot";
+        b.textContent = fmt(hh, mm);
+        const past = new Date(y, m - 1, d, hh, mm) <= new Date();
+        const key = slotKey(hh, mm);
+        if (past || booked.has(key) || fakeTaken(key)) b.disabled = true;
+        b.addEventListener("click", () => {
+          slotsEl.querySelectorAll(".slot").forEach(s => s.classList.remove("sel"));
+          b.classList.add("sel");
+          chosen = { hh, mm, label: fmt(hh, mm) };
+          updateBtn();
+        });
+        slotsEl.appendChild(b);
+      }
+    }
+
+    function niceDate() {
+      const [y, m, d] = dateEl.value.split("-").map(Number);
+      return new Date(y, m - 1, d).toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric" });
+    }
+
+    function downloadIcs() {
+      const [y, m, d] = dateEl.value.split("-");
+      const start = y + m + d + "T" + pad(chosen.hh) + pad(chosen.mm) + "00";
+      const endMin = chosen.hh * 60 + chosen.mm + (DURATION[serviceEl.value] || 30);
+      const end = y + m + d + "T" + pad(Math.floor(endMin / 60)) + pad(endMin % 60) + "00";
+      const stamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const text = [
+        "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Cutline Barbershop Demo//EN",
+        "BEGIN:VEVENT", "UID:" + Date.now() + "@cutline-demo", "DTSTAMP:" + stamp,
+        "DTSTART:" + start, "DTEND:" + end,
+        "SUMMARY:" + serviceEl.value + " at Cutline Barbershop",
+        "LOCATION:123 Example Ave\\, Saint Paul\\, MN 55101",
+        "DESCRIPTION:Barber: " + barberEl.value,
+        "END:VEVENT", "END:VCALENDAR"
+      ].join("\r\n");
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([text], { type:"text/calendar" }));
+      a.download = "cutline-appointment.ics";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    dateEl.addEventListener("change", renderSlots);
+    barberEl.addEventListener("change", renderSlots);
+    nameEl.addEventListener("input", updateBtn);
+    phoneEl.addEventListener("input", updateBtn);
+    $("cal").addEventListener("click", downloadIcs);
+
+    $("again").addEventListener("click", () => {
+      form.reset();
+      form.hidden = false;
+      done.hidden = true;
+      renderSlots();
+    });
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      if (!chosen) return;
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      msg.textContent = "";
+      const data = new FormData(form);
+      data.set("time", chosen.label);
+      data.set("_subject", "DEMO booking request: " + niceDate() + " at " + chosen.label);
+      try {
+        const res = await fetch(form.action, { method:"POST", body:data, headers:{ Accept:"application/json" } });
+        if (!res.ok) throw new Error("bad response");
+        booked.add(slotKey(chosen.hh, chosen.mm));
+        $("summary").textContent = serviceEl.value + " with " + barberEl.value + " on " + niceDate() +
+          " at " + chosen.label + ". In a real shop, they’d confirm by text.";
+        form.hidden = true;
+        done.hidden = false;
+      } catch (err) {
+        msg.textContent = "Something went wrong. Please call the shop instead.";
+      }
+      btn.textContent = "Request this time";
+      updateBtn();
+    });
+  </script>
 </body>
 </html>
